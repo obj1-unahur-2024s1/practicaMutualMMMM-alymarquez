@@ -1,0 +1,42 @@
+import actividades.*
+import socios.*
+
+
+describe "Socios" {
+	const viajePlaya1 = new ViajesPlaya(largo = 1000, idiomas = ["ingles"])
+	const viajePlaya2 = new ViajesPlaya(largo = 2000, idiomas = ["español"])
+	const claseGim = new ClasesDeGimnasia()
+	
+	const roque = new SocioRelajado(actividades = [viajePlaya1, viajePlaya2], maximo = 2, edad = 38, idiomas = ["español"])
+	const ana = new SocioTranquilo(actividades = [viajePlaya1, viajePlaya2], maximo = 3, edad = 25, idiomas = ["español"])
+	
+	test "Roque adora el sol"{
+		assert.that(roque.adoraElSol())
+	}
+	
+	test "Roque solo tiene viajePlaya2 como actividad esforzada"{
+		assert.equals([viajePlaya2], roque.actividadesEsforzadas())
+	}
+	
+	test "Roque no puede realizar una clase de gimnasia"{
+		assert.throwsExceptionWithMessage("Alcanzó el maximo de actividades",{roque.agregarActividad(claseGim)})
+	}
+	
+	test "A Roque le atrae el viajePlaya2 pero no el viajePlaya1"{
+		assert.that(roque.leAtraeActividad(viajePlaya2))
+		assert.notThat(roque.leAtraeActividad(viajePlaya1))
+	}
+	
+	test "Ana es adoradora del sol, solo tiene una actividad esforzada"{
+		assert.that(ana.adoraElSol())
+		assert.equals([viajePlaya2], ana.actividadesEsforzadas())
+	}
+	
+	test "Ana puede realizar una clase de gimnasia, ya no adora el sol, tiene dos actividades esforzadas"{
+		ana.agregarActividad(claseGim)
+		assert.notThat(ana.adoraElSol())
+		assert.equals([viajePlaya2, claseGim], ana.actividadesEsforzadas())
+	}
+	
+	
+}
